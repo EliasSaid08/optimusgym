@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Mensuales - Gimnasio Optimus</title>
+    <link rel="icon" type="image/x-icon" href="LOGO.ico">
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="optimus.png" alt="Optimus Gym" class="logo">
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="gestion-mensuales.html">Control de Mensuales</a></li>
+            <li><a href="#" id="logoutBtn">Cerrar Sesión</a></li>
+        </ul>
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Control de Mensuales</h1>
+            <p>Gestiona las membresías del gimnasio</p>
+        </div>
+
+        <!-- Alertas de miembros próximos a vencer -->
+        <div class="card alert-card" id="alertSection" style="display: none;">
+            <h2 style="color: #e53e3e;">⚠️ Alertas Importantes</h2>
+            <div id="alertsContainer"></div>
+        </div>
+
+        <div class="card">
+            <h2>Agregar Nuevo Miembro</h2>
+            <form id="memberForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nombre">Nombre Completo *</label>
+                        <input type="text" id="nombre" required placeholder="Ej: Juan Pérez">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="ejemplo@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono">Teléfono</label>
+                        <input type="tel" id="telefono" placeholder="+1 234 567 890">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="plan">Plan *</label>
+                        <select id="plan" required>
+                           <option value="">Seleccionar plan</option>
+                           <option value="Día">Día</option>
+                           <option value="Semana">Semana</option>
+                           <option value="Mensual">Mensual</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaInicio">Fecha de Inicio *</label>
+                        <input type="date" id="fechaInicio" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="monto">Monto ($) *</label>
+                        <input type="number" id="monto" step="0.01" required placeholder="0.00">
+                    </div>
+                </div>
+                <button type="submit" class="btn">➕ Agregar Miembro</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Lista de Miembros</h2>
+            
+            <!-- Filtros rápidos para estado -->
+            <div class="filters-container">
+                <div class="quick-filters">
+                    <button class="filter-btn active" data-filter="all">Todos</button>
+                    <button class="filter-btn" data-filter="proximo">Próximos a Vencer</button>
+                    <button class="filter-btn" data-filter="vencido">Vencidos</button>
+                    <button class="filter-btn" data-filter="activo">Activos</button>
+                </div>
+                
+                <div class="search-container">
+                    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar por nombre, email o teléfono...">
+                </div>
+                
+                <div style="color: #666; font-weight: 600;" id="resultsCount">
+                    Cargando...
+                </div>
+            </div>
+
+            <div class="members-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Teléfono</th>
+                            <th>Plan</th>
+                            <th>Inicio</th>
+                            <th>Vencimiento</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="membersTable">
+                        <tr>
+                            <td colspan="8" style="text-align: center; color: #999;">Cargando miembros...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/members-empleados.js"></script>
+</body>
+</html>

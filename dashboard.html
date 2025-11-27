@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Gimnasio Optimus</title>
+    <link rel="icon" type="image/x-icon" href="LOGO.ico">
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="optimus.png" alt="Optimus Gym" class="logo">
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="empleados.html">Empleados</a></li>
+            <li><a href="license.html">Licencia</a></li>
+            <li><a href="#" id="logoutBtn">Cerrar Sesión</a></li>
+        </ul>
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Dashboard Administrativo</h1>
+            <p>Gestión completa del gimnasio en un solo lugar</p>
+        </div>
+
+        <!-- Alertas de miembros próximos a vencer -->
+        <div class="card alert-card" id="alertSection" style="display: none;">
+            <h2 style="color: #e53e3e;">⚠️ Alertas Importantes</h2>
+            <div id="alertsContainer"></div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalMembers">0</div>
+                <div class="stat-label">Total Miembros</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="activeMembers">0</div>
+                <div class="stat-label">Activos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="expiredMembers">0</div>
+                <div class="stat-label">Vencidos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="expiringSoon">0</div>
+                <div class="stat-label">Por Vencer</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalEmployees">0</div>
+                <div class="stat-label">Empleados</div>
+            </div>
+        </div>
+
+        <!-- Nueva sección de ingresos -->
+        <div class="card">
+            <h2>💰 Ingresos</h2>
+            
+            <!-- Filtros de tiempo -->
+            <div class="time-filters">
+                <button class="time-filter-btn active" data-period="today">Hoy</button>
+                <button class="time-filter-btn" data-period="week">Esta Semana</button>
+                <button class="time-filter-btn" data-period="month">Este Mes</button>
+                <button class="time-filter-btn" data-period="custom">Personalizado</button>
+            </div>
+
+            <!-- Selector de fecha personalizado -->
+            <div class="custom-date-range" id="customDateRange">
+                <div class="date-input-group">
+                    <label for="startDate">Desde</label>
+                    <input type="date" id="startDate">
+                </div>
+                <div class="date-input-group">
+                    <label for="endDate">Hasta</label>
+                    <input type="date" id="endDate">
+                </div>
+                <div class="date-input-group">
+                    <label>&nbsp;</label>
+                    <button class="btn" onclick="applyCustomDateRange()" style="padding: 0.8rem 1.5rem;">Aplicar</button>
+                </div>
+            </div>
+
+            <!-- Estadísticas de ingresos -->
+            <div class="income-stats">
+                <div class="income-stat-card">
+                    <div class="amount" id="dailyIncome">$0</div>
+                    <div class="label">Ingreso Diario</div>
+                </div>
+                <div class="income-stat-card">
+                    <div class="amount" id="weeklyIncome">$0</div>
+                    <div class="label">Ingreso Semanal</div>
+                </div>
+                <div class="income-stat-card">
+                    <div class="amount" id="monthlyIncome">$0</div>
+                    <div class="label">Ingreso Mensual</div>
+                </div>
+                <div class="income-stat-card">
+                    <div class="amount" id="selectedPeriodIncome">$0</div>
+                    <div class="label" id="selectedPeriodLabel">Periodo Seleccionado</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de Gestión de Mensuales -->
+        <div class="card">
+            <h2>👥 Gestión de Mensuales</h2>
+            
+            <!-- Formulario para agregar/editar miembros -->
+            <div class="form-section">
+                <h3 id="formTitle">Agregar Nuevo Miembro</h3>
+
+
+                <form id="memberForm">
+                    <input type="hidden" id="selectedPlanType" value="Mensual">
+                    <input type="hidden" id="selectedPlanDuration" value="30">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nombre">Nombre Completo *</label>
+                            <input type="text" id="nombre" required placeholder="Ej: Juan Pérez">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" placeholder="ejemplo@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="telefono">Teléfono</label>
+                            <input type="tel" id="telefono" placeholder="+1 234 567 890">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="plan">Tipo de Plan *</label>
+                            <select id="plan" required>
+                                <option value="">Seleccionar plan</option>
+                                <option value="Día">Día</option>
+                                <option value="Semana">Semana</option>
+                                <option value="Mensual">Mensual</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="fechaInicio">Fecha de Inicio *</label>
+                            <input type="date" id="fechaInicio" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="monto">Monto ($) *</label>
+                            <input type="number" id="monto" step="0.01" required placeholder="0.00">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn" id="submitBtn">➕ Agregar Miembro</button>
+                        <button type="button" class="btn btn-secondary" id="cancelBtn" style="display: none;">❌ Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Lista de miembros -->
+            <div class="members-section">
+                <h3>Lista de Miembros</h3>
+                
+                <!-- Filtros y búsqueda -->
+                <div class="filters-container">
+                    <div class="quick-filters">
+                        <button class="filter-btn active" data-filter="all">Todos</button>
+                        <button class="filter-btn" data-filter="proximo">Próximos a Vencer</button>
+                        <button class="filter-btn" data-filter="vencido">Vencidos</button>
+                        <button class="filter-btn" data-filter="activo">Activos</button>
+                    </div>
+                    
+                    <div class="search-container">
+                        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar por nombre, email o teléfono...">
+                    </div>
+                    
+                    <div style="color: #666; font-weight: 600;" id="resultsCount">
+                        Cargando...
+                    </div>
+                </div>
+
+                <div class="members-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Teléfono</th>
+                                <th>Plan</th>
+                                <th>Inicio</th>
+                                <th>Vencimiento</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="membersTable">
+                            <tr>
+                                <td colspan="8" style="text-align: center; color: #999;">Cargando miembros...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="support-buttons">
+            <a href="#" class="whatsapp-btn technical-btn" id="technicalSupport">
+                🚨 Soporte Técnico 
+            </a>
+            <a href="#" class="whatsapp-btn maintenance-btn" id="maintenanceSupport">
+                ⚙️ Mantenimiento 
+            </a>
+            <a href="#" class="whatsapp-btn updates-btn" id="updatesSupport">
+                🎯 Nuevas Actualizaciones
+            </a>
+        </div>
+
+        <!-- Footer de Licencia -->
+        <div class="card license-footer">
+            <div class="footer-content">
+                <div class="copyright">
+                    <p>© 2025 Elías Said. Todos los derechos reservados.</p>
+                    <p>Sistema de Gestión Optimus Gym - Licencia Comercial</p>
+                </div>
+                <div class="legal-links">
+                    <a href="license.html" class="legal-link">Términos de Licencia</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard-completo.js"></script>
+</body>
+</html>

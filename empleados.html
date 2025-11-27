@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Empleados - Gimnasio Optimus</title>
+    <link rel="icon" type="image/x-icon" href="LOGO.ico">
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="optimus.png" alt="Optimus Gym" class="logo">
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="dashboard.html" id="dashboardLink">Dashboard</a></li>
+            <li><a href="license.html">Licencia</a></li>
+            <li><a href="#" id="logoutBtn">Cerrar Sesión</a></li>
+        </ul>
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Gestión de Empleados</h1>
+            <p>Administra el personal del gimnasio de forma eficiente</p>
+        </div>
+
+        <div class="card">
+            <h2>👥 Agregar Nuevo Empleado</h2>
+            <form id="employeeForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nombre">Nombre Completo *</label>
+                        <input type="text" id="nombre" required placeholder="Ej: María González">
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Usuario *</label>
+                        <input type="text" id="username" required placeholder="Ej: mariagonzalez">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="password">Contraseña *</label>
+                        <input type="password" id="password" required placeholder="Mínimo 6 caracteres">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" required placeholder="empleado@gimnasio.com">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="telefono">Teléfono *</label>
+                        <input type="tel" id="telefono" required placeholder="+1 234 567 890">
+                    </div>
+                    <div class="form-group">
+                        <label for="puesto">Puesto *</label>
+                        <select id="puesto" required>
+                            <option value="">Seleccionar puesto</option>
+                            <option value="Recepcionista">📋 Recepcionista</option>
+                            <option value="Entrenador">💪 Entrenador</option>
+                            <option value="Gerente">👨‍💼 Gerente</option>
+                            <option value="Limpieza">🧹 Limpieza</option>
+                            <option value="Nutriólogo">🥗 Nutriólogo</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn">➕ Agregar Empleado</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>📊 Lista de Empleados</h2>
+            
+            <!-- Buscador para empleados -->
+            <div class="filters-container">
+                <div class="search-container">
+                    <input type="text" id="searchEmployeeInput" class="search-input" placeholder="🔍 Buscar empleados...">
+                </div>
+                <div style="color: #666; font-weight: 600;" id="employeeResultsCount">
+                    Cargando...
+                </div>
+            </div>
+
+            <div class="members-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Usuario</th>
+                            <th>Email</th>
+                            <th>Teléfono</th>
+                            <th>Puesto</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeesTable">
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: #999;">Cargando empleados...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+                
+        <div class="support-buttons">
+            <a href="#" class="whatsapp-btn technical-btn" id="technicalSupport">
+                👥 Soporte Empleados
+            </a>
+            <a href="#" class="whatsapp-btn maintenance-btn" id="maintenanceSupport">
+                🔐 Problemas de Permisos
+            </a>
+            <a href="#" class="whatsapp-btn updates-btn" id="updatesSupport">
+                📈 Actualizaciones HR
+            </a>
+        </div>
+
+        <!-- Footer de Licencia -->
+        <div class="card license-footer">
+            <div class="footer-content">
+                <div class="copyright">
+                    <p>© 2025 Elías Said. Todos los derechos reservados.</p>
+                    <p>Sistema de Gestión Optimus Gym - Licencia Comercial</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/employees.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configurar enlaces de WhatsApp específicos para empleados
+            const technicalSupport = document.getElementById('technicalSupport');
+            const maintenanceSupport = document.getElementById('maintenanceSupport');
+            const updatesSupport = document.getElementById('updatesSupport');
+
+            if (technicalSupport) {
+                technicalSupport.href = generateWhatsAppLink('Hola, necesito soporte con el módulo de empleados');
+            }
+            if (maintenanceSupport) {
+                maintenanceSupport.href = generateWhatsAppLink('Hola, problema con gestión de usuarios y permisos');
+            }
+            if (updatesSupport) {
+                updatesSupport.href = generateWhatsAppLink('Hola, consultar actualizaciones del módulo de empleados');
+            }
+        });
+    </script>
+</body>
+</html>
