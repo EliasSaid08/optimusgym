@@ -256,26 +256,6 @@ function initializeAuth() {
     }
 }
 
-// Función para generar enlaces de WhatsApp
-function generateWhatsAppLink(message) {
-    const phoneNumber = '5492610000000';
-    const encodedMessage = encodeURIComponent(message);
-    return `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-}
-
-// Configurar todos los enlaces de WhatsApp
-function setupWhatsAppLinks() {
-    const whatsappLinks = document.querySelectorAll('a[href*="wa.me"], .whatsapp-btn');
-    
-    whatsappLinks.forEach(link => {
-        const currentHref = link.getAttribute('href');
-        if (!currentHref || !currentHref.includes('wa.me')) {
-            const defaultMessage = 'Hola, necesito ayuda con el sistema del gimnasio';
-            link.href = generateWhatsAppLink(defaultMessage);
-        }
-    });
-}
-
 // Verificación global de autenticación
 function requireAuth() {
     const userRole = localStorage.getItem('userRole');
