@@ -77,7 +77,7 @@ function renderEmployees(employees) {
     if (!employeesTable) return;
 
     if (employees.length === 0) {
-        employeesTable.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #999;">No hay empleados registrados</td></tr>';
+        employeesTable.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #999;">No hay empleados registrados</td></tr>';
         return;
     }
 
@@ -97,6 +97,9 @@ function renderEmployees(employees) {
                     <button class="action-btn edit-btn" onclick="editEmployee('${employee.id}')">Editar</button>
                     <button class="action-btn ${employee.active ? 'delete-btn' : 'edit-btn'}" onclick="toggleEmployeeStatus('${employee.id}', ${!employee.active})">
                         ${employee.active ? 'Desactivar' : 'Activar'}
+                    </button>
+                    <button class="action-btn delete-btn" onclick="deleteEmployee('${employee.id}', '${employee.nombre}')" title="Eliminar permanentemente">
+                        🗑️ Eliminar
                     </button>
                 </td>
             </tr>
@@ -240,7 +243,32 @@ async function toggleEmployeeStatus(id, newStatus) {
     }
 }
 
+async function deleteEmployee(id, nombre) {
+    if (!confirm(`¿Estás seguro de que deseas ELIMINAR PERMANENTEMENTE al empleado "${nombre}"?\n\n⚠️ Esta acción no se puede deshacer.`)) return;
+
+    try {
+        console.log('Eliminando empleado ID:', id);
+        
+        const { error } = await supabaseClient
+            .from('employees')
+            .delete()
+            .eq('id', id);
+
+        if (error) {
+            console.error('Error de Supabase:', error);
+            throw new Error(`Error al eliminar empleado: ${error.message}`);
+        }
+
+        loadEmployees();
+        alert(`Empleado "${nombre}" eliminado correctamente`);
+    } catch (error) {
+        console.error('Error al eliminar empleado:', error);
+        alert(error.message);
+    }
+}
+
 // Hacer funciones disponibles globalmente
 window.editEmployee = editEmployee;
 window.toggleEmployeeStatus = toggleEmployeeStatus;
 window.handleEmployeeSubmit = handleEmployeeSubmit;
+window.deleteEmployee = deleteEmployee;
